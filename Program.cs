@@ -51,6 +51,32 @@ namespace DagboksAppen
             }
         }
 
+        static void SearchEntry()
+        {
+            Console.Write("Ange ett datum att söka efter (yyyy-mm-dd: ");
+            string dateInput = Console.ReadLine();
+
+            if (!DateTime.TryParse(dateInput,out DateTime date))
+            {
+                Console.WriteLine("Ogiltigt datumformat. Försök igen.");
+                return;
+            }
+
+            var foundEntries = diaryEntries.FindAll(e => e.Date.Date == date.Date);
+
+            if (foundEntries.Count  == 0)
+            {
+                Console.WriteLine("Ingen anteckning hittades på det datumet");
+                return;
+            }
+
+            foreach (var entry in foundEntries)
+            {
+                Console.WriteLine($"\nDatum: {entry.Date:yyyy-MM-dd}");
+                Console.WriteLine($"Text: {entry.Text}");
+            }
+        }
+
         static void Main(string[] args)
         {
             while (true)
@@ -75,7 +101,7 @@ namespace DagboksAppen
                         ListEntries();
                         break;
                         case "3":
-                        //TODO: Sök anteckning
+                        SearchEntry();
                         break;
                         case "4":
                         //TODO: Spara till fil
