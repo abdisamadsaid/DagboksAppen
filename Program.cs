@@ -38,6 +38,8 @@ namespace DagboksAppen
 
         static void ListEntries()
         {
+            diaryEntries.Sort((x, y) =>  x.Date.CompareTo(y.Date));
+            
             if (diaryEntries.Count == 0)
             {
                 Console.WriteLine("Inga anteckningar att visa");
@@ -149,7 +151,7 @@ namespace DagboksAppen
                 Console.WriteLine("6. Avsluta");
                 Console.WriteLine("Välj ett alternativ: ");
 
-                string choice = Console.ReadLine();
+                string choice = Console.ReadLine().Trim();
 
                 switch (choice)
                 {
@@ -169,6 +171,7 @@ namespace DagboksAppen
                         LoadFromFile();
                         break;
                         case "6":
+                        Console.WriteLine("Programmet avlutas. Hej då!");
                         return; //avslutar programmet
                     default:
                         Console.WriteLine("Ogiltigt val, försök igen.");
