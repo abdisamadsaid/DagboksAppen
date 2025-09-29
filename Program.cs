@@ -77,6 +77,65 @@ namespace DagboksAppen
             }
         }
 
+        static void SaveToFile()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter("diary.txt"))
+                {
+                    foreach (var entry in diaryEntries)
+                    {
+                        writer.WriteLine($"{entry.Date:yyyy-MM-dd}|{entry.Text}");
+                    }
+                }
+                Console.WriteLine("Anteckningar sparade till diary.txt");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fel vid sparande: {ex.Message}");
+            }
+        }
+
+        static void LoadFromFile()
+        {
+            try
+            {
+                if (!File.Exists("diary.txt"))
+                {
+                    Console.WriteLine("Filen finns inte");
+                    return;
+                }
+
+                diaryEntries.Clear();
+
+                using (StreamReader reader = new StreamReader ("diary.txt"))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] parts = line.Split('|');
+                        if (parts.Length != 2)
+                            continue;
+
+                        if (!DateTime.TryParse(parts[0], out DateTime date))
+                            continue;
+
+                        diaryEntries.Add(new DiaryEntry
+                        {
+                            Date = date,
+                            Text = parts[1]
+                        });
+                    }
+                }
+                Console.WriteLine("Anteckningar lästa från diary.txt");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fel vid läsning: {ex.Message}");
+            }
+        }
+
         static void Main(string[] args)
         {
             while (true)
@@ -104,10 +163,10 @@ namespace DagboksAppen
                         SearchEntry();
                         break;
                         case "4":
-                        //TODO: Spara till fil
+                        SaveToFile();
                         break;
                         case "5":
-                        //TODO: Läs från fil
+                        LoadFromFile();
                         break;
                         case "6":
                         return; //avslutar programmet
